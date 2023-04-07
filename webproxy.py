@@ -8,6 +8,12 @@
 # # # Section 2.2.3 HTTP Message Format
 # I am using 4096 bytes because 1024 is not big enough which causes cut-offs
 
+# Use cases:
+# # gaia.cs.umass.edu/wireshark-labs/HTTP-wireshark-file4.html
+# # www.google.com/unknown
+# # www.google.com
+# # www.utdallas.edu/~kvl140030/4390/Earth.jpg
+
 from socket import *
 
 # Create a server socket welcomeSocket, bind to a port p # This is the welcoming socket used to listen to requests coming from a client
@@ -19,10 +25,6 @@ welcomeSocket.listen(1)
 
 # Virtual cache
 cache = dict()
-useCases = ["gaia.cs.umass.edu/wireshark-labs/HTTP-wireshark-file4.html",
-            "www.google.com/unknown",
-            "www.google.com",
-            "www.utdallas.edu/~kvl140030/4390/Earth.jpg"]
 
 while True:
     # print ‘WEB PROXY SERVER IS LISTENING’
@@ -42,8 +44,8 @@ while True:
     destAddr = splitMsg[1].removeprefix("/") # Removes the preceding "/"
     httpVer = splitMsg[2]
 
-    # Focus on use cases and ignore the favicon browser request spam
-    if destAddr not in useCases:
+    # Ignore the favicon browser request spam
+    if "favicon" in destAddr:
         continue
 
     # Print the message received from the client
@@ -106,7 +108,7 @@ while True:
             # if response is 200 OK
             # Write object into cache
             statusCode = responseHeader.split()[1]
-            if (statusCode == "200"):
+            if (statusCode == "200" or statusCode == "301" or statusCode == "302"): # Update: I added 301 and 302
                 cache[destAddr] = response
             
             # Close serverSocket
@@ -117,8 +119,7 @@ while True:
 
             # Print the response header from the proxy to the client
             print("\n*** RESPONSE FROM PROXY TO CLIENT")
-            cachedResponseHeader = cache[destAddr].partition("\r\n\r\n")[0]
-            print(cachedResponseHeader + "\n")
+            print(responseHeader + "\n") # Update: I made it more generic to use the direct response so the 404 case works too
     
         # if object is in the cache
         else:
