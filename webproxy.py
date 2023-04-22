@@ -8,11 +8,10 @@
 # # # Section 2.2.3 HTTP Message Format
 # I am using 4096 bytes because 1024 is not big enough which causes cut-offs
 
-# Use cases:
-# # gaia.cs.umass.edu/wireshark-labs/HTTP-wireshark-file4.html
-# # www.google.com/unknown
-# # www.google.com
-# # www.utdallas.edu/~kvl140030/4390/Earth.jpg
+#useCases = ["gaia.cs.umass.edu/wireshark-labs/HTTP-wireshark-file4.html",
+#           "www.google.com/unknown",
+#           "www.google.com",
+#           "www.utdallas.edu/~kvl140030/4390/Earth.jpg"]
 
 from socket import *
 
@@ -40,6 +39,8 @@ while True:
     # Split the message to extract the header
     # Parse the header to extract the method, dest address, HTTP version
     splitMsg = message.split()
+    if len(splitMsg) < 3: # This prevents empty request spam from browser
+        continue
     method = splitMsg[0]
     destAddr = splitMsg[1].removeprefix("/") # Removes the preceding "/"
     httpVer = splitMsg[2]
