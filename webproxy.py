@@ -8,7 +8,7 @@
 # # # Section 2.2.3 HTTP Message Format
 # I am using 4096 bytes because 1024 is not big enough which causes cut-offs
 
-#useCases = ["gaia.cs.umass.edu/wireshark-labs/HTTP-wireshark-file4.html",
+# useCases = ["gaia.cs.umass.edu/wireshark-labs/HTTP-wireshark-file4.html",
 #           "www.google.com/unknown",
 #           "www.google.com",
 #           "www.utdallas.edu/~kvl140030/4390/Earth.jpg"]
